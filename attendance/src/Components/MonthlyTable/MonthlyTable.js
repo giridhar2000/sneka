@@ -57,8 +57,8 @@ export default function MonthlyTable() {
                                         :
                                         <td key={index} className='present'>P</td>
                                 )}
-                                <td>{numberofDays.length - value.leaves_dates.length}</td>
-                                <td>{value.leaves_dates.length}</td>
+                                <td>{numberofDays.length - value.leaves_dates.split(`,`).map(x => { return +x }).length}</td>
+                                <td>{value.leaves_dates.split(`,`).map(x => { return +x }).length}</td>
                                 <td>0</td>
                             </tr>
                         ))}
