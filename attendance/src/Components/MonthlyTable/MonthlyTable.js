@@ -5,20 +5,19 @@ import "../MonthlyTable/MonthlyTable.css"
 export default function MonthlyTable() {
     const [data, setData] = useState([]);
     const numberofDays = []
-    let lastDay, leave_dates = [];
     const monthName = sessionStorage.getItem("month")
 
     const getData = async () => {
         await axios.post("http://localhost:9000/month", { "month": monthName })
             .then((response) => {
-                setData(response.data);console.log(response.data)
+                setData(response.data); console.log(response.data)
             })
             .catch((err) => console.log(err))
     }
 
-    const ThirtyOneDays = ["January", "March", "May", "July", "August", "October", "December"];
-
     const days = () => {
+        const ThirtyOneDays = ["January", "March", "May", "July", "August", "October", "December"];
+        let lastDay;
         if (ThirtyOneDays.includes(monthName)) lastDay = 31;
         else if (monthName === "February") lastDay = 28;
         else lastDay = 30;
@@ -26,23 +25,15 @@ export default function MonthlyTable() {
             numberofDays.push(i)
         }
     }
-
-    const nums = () => {
-        data?.map((v, i) => {
-            v.leaves_dates.split(`,`).map(x => leave_dates.push(+x))
-        })
-    }
-
     days();
-    nums();
 
     useEffect(() => {
-        getData();        
+        getData();
     }, [])
 
     return (
         <div className='monthlyTable'>
-             <h1>{monthName} Table</h1>
+            <h1>{monthName} Table</h1>
             <table>
                 <tbody>
                     <tr className='heading'>
@@ -55,23 +46,28 @@ export default function MonthlyTable() {
                         <td>Leaves</td>
                         <td>Holidays</td>
                     </tr>
-                    {data?.map((value, index) => (
-                        <tr key={index}>
-                            <td>{value.employee_id}</td>
-                            <td>{value.employee_name}</td>
-                            {numberofDays?.map((v, index) =>
-                                value.leaves_dates.includes(v) ? 
-                                    <td key={index} className='leave'>L</td>
-                                    :
-                                    <td key={index} className='present'>P</td>
-                            )}
-                            <td>{numberofDays.length - value.leaves_dates.length}</td>
-                            <td>{value.leaves_dates.length}</td>
-                            <td>0</td>
-                        </tr>
-                    ))}
+                    {
+                        data?.map((value, index) => (
+                            <tr key={index}>
+                                <td>{value.employee_id}</td>
+                                <td>{value.employee_name}</td>
+                                {numberofDays?.map((v, index) =>
+                                    value.leaves_dates.split(`,`).map(x => { return +x }).includes(v) ?
+                                        <td key={index} className='leave'>L</td>
+                                        :
+                                        <td key={index} className='present'>P</td>
+                                )}
+                                <td>{numberofDays.length - value.leaves_dates.length}</td>
+                                <td>{value.leaves_dates.length}</td>
+                                <td>0</td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
+            {data.length > 0 ?
+                ""
+                :
+                <h2 style={{textAlign: "center"}}>No Records</h2>}
         </div>
     )
 }

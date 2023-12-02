@@ -63,10 +63,10 @@ app.get("/get", async (req, res) => {
 })
 
 app.post("/month", async (req, res) => {
+    let data = []
     var sql = `SELECT employee_id, employee_name, leave_month, GROUP_CONCAT(leave_date) as leaves_dates FROM employee_details WHERE leave_month = "${req.body.month}" GROUP BY employee_id, employee_name, leave_month;`
     con.query(sql, function (err, result) {
         if (err) throw err
-        console.log(result)
         res.send(result)
     })
 })
