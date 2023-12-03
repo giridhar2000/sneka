@@ -7,7 +7,7 @@ export default function Table() {
     const [data, setData] = useState([]);
     const year = new Date()
     const getData = async () => {
-        await axios.get("http://localhost:9000/get").then((response) => { setData(response.data); console.log(response.data) }).catch((err) => console.log(err))
+        await axios.get("http://localhost:9000/get").then((response) => { setData(response.data); }).catch((err) => console.log(err))
     }
     useEffect(() => {
         getData();
@@ -20,18 +20,18 @@ export default function Table() {
             <table>
                 <tbody>
                     <tr className='heading'>
-                    <td>S No.</td>
-                    <td>Employee ID</td>
-                    <td>Employee Name</td>
-                    {column?.map((value, index) => (
-                        <td><Link to={"/month"} onClick={()=> sessionStorage.setItem("month", value)}>{value}</Link></td>
-                    ))}
-                    <td>Leaves</td>
-                    <td>Working days</td>
+                        <td>S No.</td>
+                        <td>Employee ID</td>
+                        <td>Employee Name</td>
+                        {column?.map((value, index) => (
+                            <td><Link to={"/month"} onClick={() => sessionStorage.setItem("month", value)}>{value}</Link></td>
+                        ))}
+                        <td>Leaves</td>
+                        <td>Working days</td>
                     </tr>
                     {data?.map((value, index) => (
                         <tr>
-                            <td>{index+1}</td>
+                            <td>{index + 1}</td>
                             <td>{value.employee_id}</td>
                             <td>{value.employee_name}</td>
                             <td>{31 - value.January}</td>
