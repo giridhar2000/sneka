@@ -3,12 +3,12 @@ import "../Home/Home.css"
 import axios from 'axios'
 
 export default function Home() {
-  
+
   const [values, setValues] = useState([])
   var month = new Date();
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   var getDaysArray = function (start, end) {
-     //calculate no of days between given dates
+    //calculate no of days between given dates
     for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
       arr.push(new Date(dt));
     }
@@ -26,9 +26,14 @@ export default function Home() {
   }
 
   const submit = async () => {
-    var leave_dates = getDaysArray(values.leavefrom, values.leaveto)
-    await axios.post('http://localhost:9000/post', { values, leave_dates, month, "Reason": "Casual" }).then((res) => console.log(res)).catch((err) => console.log(err))
-    console.log(values)
+    if (values.employeeid == 2136397) {
+      var leave_dates = getDaysArray(values.leavefrom, values.leaveto)
+      await axios.post('http://localhost:9000/post', { values, leave_dates, month, "Reason": "Casual" }).then((res) => console.log(res)).catch((err) => console.log(err))
+      console.log(values)
+    }
+    else {
+      console.log('not a valid user')
+    }
   }
 
   return (
