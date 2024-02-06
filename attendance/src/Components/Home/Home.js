@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import "../Home/Home.css"
 import axios from 'axios'
+import { message } from 'antd';
+
 
 export default function Home() {
 
   const [values, setValues] = useState([])
+  const [messageApi, contextHolder] = message.useMessage();
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Invalid User',
+    });
+  };
   var month = new Date();
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  const users = [2136397,2140685];
   var getDaysArray = function (start, end) {
     //calculate no of days between given dates
     for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
@@ -26,18 +36,19 @@ export default function Home() {
   }
 
   const submit = async () => {
-    if (values.employeeid == 2136397) {
+    if (values.employeeid.includes(users)) {
       var leave_dates = getDaysArray(values.leavefrom, values.leaveto)
       await axios.post('http://localhost:9000/post', { values, leave_dates, month, "Reason": "Casual" }).then((res) => console.log(res)).catch((err) => console.log(err))
       console.log(values)
     }
     else {
-      console.log('not a valid user')
+      error();
     }
   }
 
   return (
     <div className="formdiv">
+      {contextHolder}
       <h2>Leave Form</h2>
       <form action="" className="form">
         <div className="formgroup">
