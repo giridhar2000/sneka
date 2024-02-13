@@ -6,6 +6,7 @@ export default function MonthlyTable() {
     const [data, setData] = useState([]);
     const numberofDays = []
     const monthName = sessionStorage.getItem("month")
+    const holidays = [""]
 
     const getData = async () => {
         await axios.post("http://localhost:9000/month", { "month": monthName })
@@ -47,15 +48,23 @@ export default function MonthlyTable() {
                         <td>Holidays</td>
                     </tr>
                     {data?.map((value, index) => (
-                        <tr key={index}>
+                        <tr key={index} className='data-tr'>
                             <td>{value.employee_id}</td>
                             <td>{value.employee_name}</td>
-                            {numberofDays?.map((v, index) =>
+                            {numberofDays?.map((v, index) => (
                                 value.leaves_dates.split(`,`).map(x => { return +x }).includes(v) ?
                                     <td key={index} className='leave'>L</td>
                                     :
-                                    <td key={index} className='present'>P</td>
-                            )}
+                                    <>
+                                        {numberofDays?.map((v, index) =>
+                                            value.leaves_dates.split(`,`).map(x => { return +x }).includes(v) ?
+                                                <td key={index} className='leave'>L</td>
+                                                :
+                                                <td key={index} className='present'>P</td>
+                                        )
+                                        }
+                                    </>
+                            ))}
                             <td>{numberofDays.length - value.leaves_dates.split(`,`).map(x => { return +x }).length}</td>
                             <td>{value.leaves_dates.split(`,`).map(x => { return +x }).length}</td>
                             <td>0</td>
