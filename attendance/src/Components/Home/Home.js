@@ -3,9 +3,7 @@ import "../Home/Home.css"
 import axios from 'axios'
 import { message } from 'antd';
 
-
 export default function Home() {
-
   const [values, setValues] = useState([])
   const [messageApi, contextHolder] = message.useMessage();
   const error = () => {
@@ -26,7 +24,6 @@ export default function Home() {
       var d = new Date(element);
       month = monthNames[d.getMonth()];  //convert the numeric month obtained from a Date object into its corresponding textual representation.
       return d.getDay() === 6 || d.getDay() === 0 ? "" : `${d.getDate()}`;
-
     });
     return arr.filter(Boolean);
   };
