@@ -9,12 +9,11 @@ export default function Home() {
   const error = () => {
     messageApi.open({
       type: 'error',
-      content: 'Invalid User',
+      content: 'Invalid Input',
     });
   };
   var month = new Date();
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-  const users = [2136397,2140685];
   var getDaysArray = function (start, end) {
     //calculate no of days between given dates
     for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
@@ -33,10 +32,12 @@ export default function Home() {
   }
 
   const submit = async () => {
-    if (values.employeeid.includes(users)) {
+    const regex = /^[0-9\b]+$/;
+    if (regex.test(values.employeeid)) {
       var leave_dates = getDaysArray(values.leavefrom, values.leaveto)
       await axios.post('http://localhost:9000/post', { values, leave_dates, month, "Reason": "Casual" }).then((res) => console.log(res)).catch((err) => console.log(err))
       console.log(values)
+
     }
     else {
       error();
